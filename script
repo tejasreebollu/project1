@@ -1,0 +1,11 @@
+#!/bin/bash
+######
+author : teja
+#######
+ec2 instances
+echo " ec2 describr-instances"
+aws s3
+echo " print storage buckets"
+changed 
+added new lines 
+then merging
