@@ -2,14 +2,22 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven-3'
+        maven 'Maven'
     }
 
     stages {
+
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/annapoorna-k/project1.git'
+            }
+        }
+
         stage('Build') {
             steps {
                 sh 'mvn clean package'
             }
         }
+
     }
 }
