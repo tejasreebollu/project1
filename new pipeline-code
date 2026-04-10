@@ -1,9 +1,9 @@
 pipeline {
     agent {
-      Docker {
-        image 'node:17'
-           }
-        }
+     docker {
+        image 'maven:3.8.6'
+    }
+}
 
     tools {
         maven 'Maven-3'
