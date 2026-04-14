@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "myapp"
+        TAG = "latest"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo "Cloning code..."
+                git 'https://github.com/sample-repo/demo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building application..."
+                sh 'echo Build step (example: mvn clean package)'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running tests..."
+                sh 'echo Test step (example: mvn test)'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image..."
+                sh 'docker build -t $IMAGE_NAME:$TAG .'
+            }
+        }
+
+        stage('Run Container (Test Deploy)') {
+            steps {
+                echo "Running container..."
+                sh 'docker run -d -p 8081:80 --name test-container $IMAGE_NAME:$TAG'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo "Checking container..."
+                sh 'docker ps'
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                echo "Cleaning old container..."
+                sh 'docker rm -f test-container || true'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline finished 🔁"
+        }
+        success {
+            echo "Success ✅"
+        }
+        failure {
+            echo "Failed ❌"
+        }
+    }
+}
