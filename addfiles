@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven3'   // Make sure Maven is configured in Jenkins
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo "Code checkout done by Jenkins"
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building with Maven..."
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running tests..."
+                sh 'mvn test'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo "Building Docker image..."
+                sh 'docker build -t myapp .'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo "Running container..."
+                sh 'docker run -d -p 8081:80 --name myapp-container myapp || true'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Build Success ✅"
+        }
+        failure {
+            echo "Build Failed ❌"
+        }
+    }
+}
