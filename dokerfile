@@ -1,0 +1,14 @@
+# Use base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy files
+COPY . .
+
+# Install dependencies
+RUN npm install
+
+# Run application
+CMD ["node", "app.js"]
